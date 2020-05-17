@@ -71,7 +71,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def play(self, ctx, *, search: str):
-        """Plays from JamendoMusic"""
+        """Plays a song from JamendoMusic"""
 
         async with ctx.typing():
             player = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
