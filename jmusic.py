@@ -75,24 +75,24 @@ class Song:
 class SongQueue(asyncio.Queue):
     def __getitem__(self, item):
         if isinstance(item, slice):
-            return list(itertools.islice(self.queue, item.start, item.stop, item.step))
+            return list(itertools.islice(self._queue, item.start, item.stop, item.step))
         else:
             return self._queue[item]
 
     def __iter__(self):
-        return self.queue.__iter__()
+        return self._queue.__iter__()
 
     def __len__(self):
         return self.qsize()
 
     def clear(self):
-        self.queue.clear()
+        self._queue.clear()
 
     def shuffle(self):
         random.shuffle(self.queue)
 
     def remove(self, index: int):
-        del self.queue[index]
+        del self._queue[index]
 
 class VoiceState:
     def __init__(self, bot: commands.Bot, ctx: commands.Context):
