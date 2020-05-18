@@ -320,7 +320,7 @@ bot = commands.Bot(command_prefix="jm.")
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name="Jamendo Music | jm.help", type=discord.ActivityType.listening))
+    await bot.change_presence(status=discord.Status.dnd, activity=discord.Activity(name="ATM BROKEN - DON'T USE ME UNTIL I'M FIXED!", type=discord.ActivityType.playing))
     print('Logged in as {0}'.format(bot.user))
 
 bot.add_cog(JamendoMusic(bot))
