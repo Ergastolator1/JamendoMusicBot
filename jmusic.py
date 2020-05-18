@@ -64,14 +64,13 @@ class JamendoMusic(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def about(self, ctx) {
+    async def about(self, ctx):
         """About Jamendo Music"""
         embed = discord.Embed(title="About", description="In the early years of the new millennium, there was a limited set of options for anyone who wanted to enjoy music online: downloading illegally from P2P file-sharing services, or spending money on digital downloads that you could only use on one specific device.\n\nIn the rise of more permissive models and movements such as *Open Source* and the *FreeCulture Movement*, new ideas on how to digitally share creative works came to life. *Creative Commons* brought an alternative to the automatic “all-rights reserved” copyright, eventually leading a small group of people in Luxembourg to found in 2004 the pioneering website Jamendo.com, the first platform to legally share music for free from any creator under Creative Commons licenses.\n\nMore info by [clicking here](https://www.jamendo.com/en/about).", color=0xff1e58)
         embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
         embed.set_author(name="Jamendo Music", url="https://www.jamendo.com/en/", icon_url="https://i.imgur.com/G2l6t3X.png")
 
         await ctx.send(embed=embed)
-    }
 
     @commands.command()
     async def join(self, ctx, *, channel: discord.VoiceChannel):
