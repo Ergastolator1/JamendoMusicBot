@@ -72,24 +72,24 @@ class Song:
 class SongQueue(asyncio.Queue):
     def __getitem__(self, item):
         if isinstance(item, slice):
-            return list(itertools.islice(self._queue, item.start, item.stop, item.step))
+            return list(itertools.islice(self.queue, item.start, item.stop, item.step))
         else:
             return self._queue[item]
 
     def __iter__(self):
-        return self._queue.__iter__()
+        return self.queue.__iter__()
 
     def __len__(self):
         return self.qsize()
 
     def clear(self):
-        self._queue.clear()
+        self.queue.clear()
 
     def shuffle(self):
-        random.shuffle(self._queue)
+        random.shuffle(self.queue)
 
     def remove(self, index: int):
-        del self._queue[index]
+        del self.queue[index]
 
 class VoiceState:
     def __init__(self, bot: commands.Bot, ctx: commands.Context):
@@ -181,7 +181,7 @@ class JamendoMusic(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def join(self, ctx, *, channel: discord.VoiceChannel):
+    async def join(self, ctx):
         """Joins your voice channel."""
 
         destination = ctx.author.voice.channel
@@ -199,7 +199,7 @@ class JamendoMusic(commands.Cog):
         """
 
         if not ctx.voice_state.voice:
-            await ctx.invoke(self._join)
+            await ctx.invoke(self.join)
 
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
