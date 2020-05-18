@@ -45,20 +45,17 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.url = data.get('url')
 
     @classmethod
-    async def create_source(cls, ctx: commands.Context, search: str, *, loop, download=False):
+    async def from_url(cls, url, *, loop=None, stream=False):
         loop = loop or asyncio.get_event_loop()
-
-        to_run = partial(ytdl.extract_info, url=search, download=download)
-        data = await loop.run_in_executor(None, to_run)
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
         if 'entries' in data:
             # take first item from a playlist
             data = data['entries'][0]
 
-        if download:
-            source = ytdl.prepare_filename(data)
-        else:
-            return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+        filename = data['url'] if stream else ytdl.prepare_filename(data)
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+
 
 
 class Music(commands.Cog):
@@ -75,18 +72,21 @@ class Music(commands.Cog):
         await channel.connect()
 
     @commands.command()
-    async def play(self, ctx, *, search: str):
-        """Plays a song from JamendoMusic"""
+    async def play(self, ctx, *, url: str):
+        """
+        Plays a song from JamendoMusic (only Jamendo URLs supported).
+        For example: https://www.jamendo.com/track/496520/jungle-of-groove
+        """
 
         async with ctx.typing():
-            player = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
+            player = await YTDLSource.from_url(search, loop=self.bot.loop)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
         await ctx.send('Now playing: {}'.format(player.title))
 
     @commands.command()
     async def volume(self, ctx, volume: int):
-        """Changes the player's volume"""
+        """Changes the player's volume."""
 
         if ctx.voice_client is None:
             return await ctx.send("Not connected to a voice channel.")
@@ -95,7 +95,7 @@ class Music(commands.Cog):
         await ctx.send("Changed volume to {}%".format(volume))
 
     @commands.command()
-    async def stop(self, ctx):
+    async def leave(self, ctx):
         """Stops and disconnects the bot from voice"""
 
         await ctx.voice_client.disconnect()
@@ -115,8 +115,8 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or("jm."))
 
 @bot.event
 async def on_ready():
-    print('Logged in as {0} ({0.id})'.format(bot.user))
-    print('------')
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name="Jamendo Music | jm.help", type=discord.ActivityType.listening))
+    print('Logged in as {0}'.format(bot.user))
 
 bot.add_cog(Music(bot))
 bot.run(token)
