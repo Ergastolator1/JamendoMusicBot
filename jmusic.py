@@ -43,21 +43,21 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.title = data.get('title')
         self.url = data.get('url')
 
-        @classmethod
-        async def create_source(cls, ctx, search: str, *, loop, download=False):
-            loop = loop or asyncio.get_event_loop()
+    @classmethod
+    async def create_source(cls, ctx: commands.Context, search: str, *, loop, download=False):
+        loop = loop or asyncio.get_event_loop()
 
-            to_run = partial(ytdl.extract_info, url=search, download=download)
-            data = await loop.run_in_executor(None, to_run)
+        to_run = partial(ytdl.extract_info, url=search, download=download)
+        data = await loop.run_in_executor(None, to_run)
 
-            if 'entries' in data:
-                # take first item from a playlist
-                data = data['entries'][0]
+        if 'entries' in data:
+            # take first item from a playlist
+            data = data['entries'][0]
 
-            if download:
-                source = ytdl.prepare_filename(data)
-            else:
-                return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+        if download:
+            source = ytdl.prepare_filename(data)
+        else:
+            return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
 
 
 class Music(commands.Cog):
