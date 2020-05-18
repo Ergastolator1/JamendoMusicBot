@@ -47,6 +47,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.url = data.get('url')
         self.thumbnail = data.get('thumbnail')
 
+    def __str__(self):
+        return '**{0.title}**'.format(self)
+
     @classmethod
     async def from_url(cls, url, *, loop=None, stream=False):
         loop = loop or asyncio.get_event_loop()
