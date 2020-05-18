@@ -1,5 +1,5 @@
 discord.py
 pynacl
-git+https://github.com/Ergastolator1/ytdl-for-jmusic.git@v5
+git+https://github.com/Ergastolator1/ytdl-for-jmusic.git@v6
 async-timeout
 python-dotenv
