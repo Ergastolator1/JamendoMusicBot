@@ -206,7 +206,7 @@ class JamendoMusic(commands.Cog):
             song = Song(player)
 
             await ctx.voice_state.songs.put(song)
-            await ctx.send('Enqueued {}'.format(str(player))
+            await ctx.send('Enqueued {}'.format(str(player)))
 
     @commands.command(aliases=['disconnect',])
     async def leave(self, ctx):
