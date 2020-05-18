@@ -43,17 +43,25 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.title = data.get('title')
         self.url = data.get('url')
 
-    @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
-        loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+        @classmethod
+        async def create_source(cls, ctx, search: str, *, loop, download=False):
+            loop = loop or asyncio.get_event_loop()
 
-        if 'entries' in data:
-            # take first item from a playlist
-            data = data['entries'][0]
+            to_run = partial(ytdl.extract_info, url=search, download=download)
+            data = await loop.run_in_executor(None, to_run)
 
-        filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+            if 'entries' in data:
+                # take first item from a playlist
+                data = data['entries'][0]
+
+            await ctx.send(f'```ini\n[Added {data["title"]} to the Queue.]\n```', delete_after=15)
+
+            if download:
+                source = ytdl.prepare_filename(data)
+            else:
+                return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+
+            return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
 
 
 class Music(commands.Cog):
