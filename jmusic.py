@@ -209,7 +209,6 @@ class JamendoMusic(commands.Cog):
             await ctx.send('Enqueued {}'.format(str(player))
 
     @commands.command(aliases=['disconnect',])
-    @commands.has_permissions(manage_guild=True)
     async def leave(self, ctx):
         """Clears the queue and leaves the voice channel."""
 
@@ -220,7 +219,6 @@ class JamendoMusic(commands.Cog):
         del self.voice_states[ctx.guild.id]
 
     @commands.command()
-    @commands.has_permissions(manage_guild=True)
     async def resume(self, ctx):
         """Resumes a currently paused song."""
 
@@ -229,7 +227,6 @@ class JamendoMusic(commands.Cog):
             await ctx.message.add_reaction('⏯')
 
     @commands.command()
-    @commands.has_permissions(manage_guild=True)
     async def pause(self, ctx):
         """Pauses the currently playing song."""
 
@@ -296,7 +293,6 @@ class JamendoMusic(commands.Cog):
         await ctx.message.add_reaction('✅')
 
     @commands.command()
-    @commands.has_permissions(manage_guild=True)
     async def stop(self, ctx):
         """Stops playing the song and clears the queue."""
 
