@@ -92,7 +92,7 @@ class JamendoMusic(commands.Cog):
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
-        embed = (discord.Embed(title="Now playing:", description="{}".format(player.title), color=0xff1e58).set_thumbnail(url=self.source.thumbnail))
+        embed = (discord.Embed(title="Now playing:", description="{}".format(player.title), color=0xff1e58).set_thumbnail(url=player.thumbnail))
 
         await ctx.send(embed=embed)
 
