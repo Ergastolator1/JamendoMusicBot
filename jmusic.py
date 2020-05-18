@@ -208,7 +208,7 @@ class JamendoMusic(commands.Cog):
             await ctx.voice_state.songs.put(song)
             await ctx.send('Enqueued {}'.format(str(player))
 
-    @commands.command(aliases=['disconnect'])
+    @commands.command(aliases=['disconnect',])
     @commands.has_permissions(manage_guild=True)
     async def leave(self, ctx):
         """Clears the queue and leaves the voice channel."""
@@ -227,12 +227,6 @@ class JamendoMusic(commands.Cog):
         if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
             ctx.voice_state.voice.resume()
             await ctx.message.add_reaction('⏯')
-
-    @commands.command()
-    async def leave(self, ctx):
-        """Stops and disconnects the bot from the voice channel."""
-
-        await ctx.voice_client.disconnect()
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
