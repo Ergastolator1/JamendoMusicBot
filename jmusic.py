@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import discord
 import youtube_dl
 from discord.ext import commands
+from functools import partial
 
 load_dotenv()
 token = os.getenv("TOKEN")
