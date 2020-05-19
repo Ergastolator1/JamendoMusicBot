@@ -81,7 +81,7 @@ class JamendoMusic(commands.Cog):
     @commands.command()
     async def play(self, ctx, *, url: str):
         """
-        Plays a song from JamendoMusic (only Jamendo URLs supported).
+        Plays a song from Jamendo Music (only Jamendo URLs supported).
         For example: jm.play https://www.jamendo.com/track/496520/jungle-of-groove
         """
 
@@ -122,6 +122,14 @@ class JamendoMusic(commands.Cog):
 
         await ctx.voice_client.disconnect()
 
+    @commands.command
+    async def help(self, ctx):
+        """Shows this message."""
+        embed = discord.Embed(title="Help", description=f"{ctx.prefix}about - About Jamendo Music\n{ctx.prefix}join <channel> - Joins a voice channel.\n{ctx.prefix}play <URL of the Jamendo song> - Play a song from Jamendo Music (only Jamendo URLs supported).\n{ctx.prefix}lounge - Plays some Jamendo lounge music from a 24/7 radio station.\n{ctx.prefix}volume - Changes the player's volume.\n{ctx.prefix}leave - Stops and disconnects the bot from voice.\n{ctx.prefix}help - Shows this message.", color=0xff1e58)
+        embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
+        embed.set_author(name="Jamendo Music", url="https://www.jamendo.com/en/", icon_url="https://i.imgur.com/G2l6t3X.png")
+        await ctx.send(embed=embed)
+
     @play.before_invoke
     @lounge.before_invoke
     async def ensure_voice(self, ctx):
@@ -135,6 +143,7 @@ class JamendoMusic(commands.Cog):
             ctx.voice_client.stop()
 
 bot = commands.Bot(command_prefix="jm.")
+bot.remove_command("help")
 
 @bot.event
 async def on_ready():
