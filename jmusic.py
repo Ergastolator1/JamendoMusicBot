@@ -143,12 +143,14 @@ class JamendoMusic(commands.Cog):
             ctx.voice_client.stop()
 
 bot = commands.Bot(command_prefix="jm.")
-bot.remove_command("help")
 
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name="Jamendo Music | jm.help", type=discord.ActivityType.listening))
     print('Logged in as {0}'.format(bot.user))
 
-bot.add_cog(JamendoMusic(bot))
+def setup(bot):
+    bot.remove_command("help")
+    bot.add_cog(JamendoMusic(bot))
+
 bot.run(token)
