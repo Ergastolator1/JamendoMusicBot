@@ -37,6 +37,12 @@ ffmpeg_options = {
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
+class VoiceError(Exception):
+    pass
+
+
+class YTDLError(Exception):
+    pass
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -113,6 +119,14 @@ class VoiceState:
 
     def __del__(self):
         self.audio_player.cancel()
+
+    @property
+    def volume(self):
+        return self._volume
+
+    @volume.setter
+    def volume(self, value: float):
+        self._volume = value
 
     @property
     def is_playing(self):
