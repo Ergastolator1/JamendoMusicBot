@@ -305,8 +305,8 @@ class JamendoMusic(commands.Cog):
             ctx.voice_state.voice.stop()
             await ctx.message.add_reaction('⏹')
 
-    @join.before_invoke
-    @play.before_invoke
+    @_join.before_invoke
+    @_play.before_invoke
     async def ensure_voice_state(self, ctx):
         if not ctx.author.voice or not ctx.author.voice.channel:
             raise commands.CommandError('You are not connected to any voice channel.')
