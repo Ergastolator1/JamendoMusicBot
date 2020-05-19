@@ -138,7 +138,7 @@ bot = commands.Bot(command_prefix="jm.")
 bot.remove_command("help")
 
 @bot.command(name="help")
-async def help(self, ctx):
+async def help(ctx):
     """Shows this message."""
     embed = discord.Embed(title="Help", description=f"{ctx.prefix}about - About Jamendo Music\n{ctx.prefix}join <channel> - Joins a voice channel.\n{ctx.prefix}play <URL of the Jamendo song> - Play a song from Jamendo Music (only Jamendo URLs supported).\n{ctx.prefix}lounge - Plays some Jamendo lounge music from a 24/7 radio station.\n{ctx.prefix}volume - Changes the player's volume.\n{ctx.prefix}leave - Stops and disconnects the bot from voice.\n{ctx.prefix}help - Shows this message.", color=0xff1e58)
     embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
