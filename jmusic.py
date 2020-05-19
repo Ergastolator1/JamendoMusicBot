@@ -5,6 +5,7 @@ import random
 import functools
 import itertools
 from dotenv import load_dotenv
+from async_timeout import timeout
 import discord
 import youtube_dl
 from discord.ext import commands
