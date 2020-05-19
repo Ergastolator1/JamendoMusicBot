@@ -18,7 +18,6 @@ youtube_dl.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
-    'audioformat': 'mp3',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
     'restrictfilenames': True,
     'noplaylist': True,
@@ -164,7 +163,7 @@ class JamendoMusic(commands.Cog):
         self.bot = bot
         self.voice_states = {}
 
-    def get_voice_state(self, ctx: commands.Context):
+    def get_voice_state(self, ctx):
         state = self.voice_states.get(ctx.guild.id)
         if not state:
             state = VoiceState(self.bot, ctx)
@@ -172,7 +171,7 @@ class JamendoMusic(commands.Cog):
 
         return state
 
-    async def cog_before_invoke(self, ctx: commands.Context):
+    async def cog_before_invoke(self, ctx):
         ctx.voice_state = self.get_voice_state(ctx)
 
     @commands.command()
@@ -184,8 +183,8 @@ class JamendoMusic(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def join(self, ctx):
+    @commands.command(name="join")
+    async def _join(self, ctx):
         """Joins your voice channel."""
 
         destination = ctx.author.voice.channel
@@ -195,15 +194,15 @@ class JamendoMusic(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
-    @commands.command()
-    async def play(self, ctx, *, url: str):
+    @commands.command(name="play")
+    async def _play(self, ctx, *, url: str):
         """
         Plays a song from JamendoMusic (only Jamendo URLs supported).
         For example: jm.play https://www.jamendo.com/track/496520/jungle-of-groove
         """
 
         if not ctx.voice_state.voice:
-            await ctx.invoke(self.join)
+            await ctx.invoke(self._join)
 
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
@@ -212,8 +211,8 @@ class JamendoMusic(commands.Cog):
             await ctx.voice_state.songs.put(song)
             await ctx.send('Enqueued {}'.format(str(player)))
 
-    @commands.command(aliases=['disconnect',])
-    async def leave(self, ctx):
+    @commands.command(name="leave",aliases=['disconnect',])
+    async def _leave(self, ctx):
         """Clears the queue and leaves the voice channel."""
 
         if not ctx.voice_state.voice:
@@ -222,24 +221,24 @@ class JamendoMusic(commands.Cog):
         await ctx.voice_state.stop()
         del self.voice_states[ctx.guild.id]
 
-    @commands.command()
-    async def resume(self, ctx):
+    @commands.command(name="resume")
+    async def _resume(self, ctx):
         """Resumes a currently paused song."""
 
         if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
             ctx.voice_state.voice.resume()
             await ctx.message.add_reaction('⏯')
 
-    @commands.command()
-    async def pause(self, ctx):
+    @commands.command(name="pause")
+    async def _pause(self, ctx):
         """Pauses the currently playing song."""
 
         if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
             ctx.voice_state.voice.pause()
             await ctx.message.add_reaction('⏯')
 
-    @commands.command()
-    async def skip(self, ctx):
+    @commands.command(name="skip")
+    async def _skip(self, ctx):
         """Skips to the next song in queue."""
 
         if not ctx.voice_state.is_playing:
@@ -263,8 +262,8 @@ class JamendoMusic(commands.Cog):
         else:
             await ctx.send('You have already voted to skip this song.')
 
-    @commands.command()
-    async def queue(self, ctx, *, page: int = 1):
+    @commands.command(name="queue")
+    async def _queue(self, ctx, *, page: int = 1):
         """Shows the player's queue.
         You can optionally specify the page to show. Each page contains 10 elements.
         """
@@ -286,8 +285,8 @@ class JamendoMusic(commands.Cog):
                  .set_footer(text='Viewing page {}/{}'.format(page, pages)))
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def remove(self, ctx, index: int):
+    @commands.command(name="remove")
+    async def _remove(self, ctx, index: int):
         """Removes a song from the queue at a given index."""
 
         if len(ctx.voice_state.songs) == 0:
@@ -296,8 +295,8 @@ class JamendoMusic(commands.Cog):
         ctx.voice_state.songs.remove(index - 1)
         await ctx.message.add_reaction('✅')
 
-    @commands.command()
-    async def stop(self, ctx):
+    @commands.command(name="stop")
+    async def _stop(self, ctx):
         """Stops playing the song and clears the queue."""
 
         ctx.voice_state.songs.clear()
@@ -308,7 +307,7 @@ class JamendoMusic(commands.Cog):
 
     @join.before_invoke
     @play.before_invoke
-    async def ensure_voice_state(self, ctx: commands.Context):
+    async def ensure_voice_state(self, ctx):
         if not ctx.author.voice or not ctx.author.voice.channel:
             raise commands.CommandError('You are not connected to any voice channel.')
 
@@ -320,7 +319,7 @@ bot = commands.Bot(command_prefix="jm.")
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.dnd, activity=discord.Activity(name="ATM BROKEN - DON'T USE ME UNTIL I'M FIXED!", type=discord.ActivityType.playing))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name="Jamendo Music | jm.help", type=discord.ActivityType.listening))
     print('Logged in as {0}'.format(bot.user))
 
 bot.add_cog(JamendoMusic(bot))
