@@ -92,8 +92,8 @@ class JamendoMusic(commands.Cog):
         embed = (discord.Embed(title="Now playing:", description="{}".format(player.title), color=0xff1e58).set_thumbnail(url=player.thumbnail))
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['lounge',])
-    async def jlounge(self, ctx):
+    @commands.command()
+    async def lounge(self, ctx):
         """
         Plays some Jamendo lounge music from a 24/7 radio station.
         """
@@ -102,7 +102,7 @@ class JamendoMusic(commands.Cog):
             player = await YTDLSource.from_url(url="http://streaming.radionomy.com/JamendoLounge", loop=self.bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print("Player error: %s" % e) if e else None)
 
-        embed=discord.Embed(title="Now playing:", description="**JamendoLounge**\n\nDescription: Discover Jamendo lounge music", color=0xff1e58)
+        embed=discord.Embed(title="Now playing:", description="JamendoLounge", color=0xff1e58)
         embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
         await ctx.send(embed=embed)
 
