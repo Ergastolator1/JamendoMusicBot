@@ -99,7 +99,7 @@ class JamendoMusic(commands.Cog):
         """
 
         async with ctx.typing():
-            player = await YTDLSource.from_url(url="http://streaming.radionomy.com/JamendoLounge", loop=self.bot.loop, stream=True)
+            player = await YTDLSource.from_url(url="http://webradios.ergastolator.website/JamendoLounge", loop=self.bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print("Player error: %s" % e) if e else None)
 
         embed=discord.Embed(title="Now playing:", description="JamendoLounge", color=0xff1e58)
