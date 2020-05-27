@@ -134,7 +134,7 @@ class JamendoMusic(commands.Cog):
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
 
-bot = commands.Bot(command_prefix="jm.")
+bot = commands.Bot(command_prefix=("jm.", "JM."))
 bot.remove_command("help")
 
 @bot.command(name="help")
