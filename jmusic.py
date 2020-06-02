@@ -95,15 +95,15 @@ class JamendoMusic(commands.Cog):
     @commands.command()
     async def lounge(self, ctx):
         """
-        Plays some Jamendo lounge music from a 24/7 radio station.
+        Plays some Jamendo lounge music from a 24/7 radio station - powered by Radio Attivo.
         """
 
         async with ctx.typing():
-            player = await YTDLSource.from_url(url="http://webradios.ergastolator.website/JamendoLounge", loop=self.bot.loop, stream=True)
+            player = await YTDLSource.from_url(url="http://streaming.radioattivo.gq/lounge", loop=self.bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print("Player error: %s" % e) if e else None)
 
-        embed=discord.Embed(title="Now playing:", description="JamendoLounge", color=0xff1e58)
-        embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
+        embed=discord.Embed(title="Now playing:", description="Radio Attivo Lounge", color=0xff1e58)
+        embed.set_thumbnail(url="https://streaming.radioattivo.gq/images/radioattivo2.png")
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -140,7 +140,7 @@ bot.remove_command("help")
 @bot.command(name="help")
 async def help(ctx):
     """Shows this message."""
-    embed = discord.Embed(title="Help", description=f"{ctx.prefix}about - About Jamendo Music\n{ctx.prefix}join <channel> - Joins a voice channel.\n{ctx.prefix}play <URL of the Jamendo song> - Play a song from Jamendo Music (only Jamendo URLs supported).\n{ctx.prefix}lounge - Plays some Jamendo lounge music from a 24/7 radio station.\n{ctx.prefix}volume - Changes the player's volume.\n{ctx.prefix}leave - Stops and disconnects the bot from voice.\n{ctx.prefix}help - Shows this message.", color=0xff1e58)
+    embed = discord.Embed(title="Help", description=f"{ctx.prefix}about - About Jamendo Music\n{ctx.prefix}join <channel> - Joins a voice channel.\n{ctx.prefix}play <URL of the Jamendo song> - Play a song from Jamendo Music (only Jamendo URLs supported).\n{ctx.prefix}lounge - Plays some Jamendo lounge music from a 24/7 radio station - powered by Radio Attivo.\n{ctx.prefix}volume - Changes the player's volume.\n{ctx.prefix}leave - Stops and disconnects the bot from voice.\n{ctx.prefix}help - Shows this message.", color=0xff1e58)
     embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
     embed.set_author(name="Jamendo Music", url="https://www.jamendo.com/en/", icon_url="https://i.imgur.com/G2l6t3X.png")
     await ctx.send(embed=embed)
