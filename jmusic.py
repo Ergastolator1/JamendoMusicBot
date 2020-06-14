@@ -95,15 +95,15 @@ class JamendoMusic(commands.Cog):
     @commands.command()
     async def lounge(self, ctx):
         """
-        Plays some Jamendo lounge music from a 24/7 radio station - powered by Radio Attivo.
+        Plays some Jamendo lounge music from a 24/7 radio station
         """
 
         async with ctx.typing():
-            player = await YTDLSource.from_url(url="http://streaming.radioattivo.gq/lounge", loop=self.bot.loop, stream=True)
+            player = await YTDLSource.from_url(url="http://streaming.radionomy.com/JamendoLounge", loop=self.bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print("Player error: %s" % e) if e else None)
 
-        embed=discord.Embed(title="Now playing:", description="Radio Attivo Lounge", color=0xff1e58)
-        embed.set_thumbnail(url="https://streaming.radioattivo.gq/images/radioattivo2.png")
+        embed=discord.Embed(title="Now playing:", description="JamendoLounge", color=0xff1e58)
+        embed.set_thumbnail(url="https://i.imgur.com/G2l6t3X.png")
         await ctx.send(embed=embed)
 
     @commands.command()
