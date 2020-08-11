@@ -155,7 +155,7 @@ async def on_guild_join(guild):
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f"Jamendo Music on {len(bot.guilds)} servers! | Use jm.help for help.", type=discord.ActivityType.listening))
 
 @bot.event
-async def on_guild_leave(guild):
+async def on_guild_remove(guild):
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f"Jamendo Music on {len(bot.guilds)} servers! | Use jm.help for help.", type=discord.ActivityType.listening))
 
 bot.add_cog(JamendoMusic(bot))
